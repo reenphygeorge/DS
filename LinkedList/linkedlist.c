@@ -13,107 +13,166 @@ DATE - 31st January, 2022
 struct node
 {
 	int data;
-	struct node* next;
+	struct node *next;
 };
 
-struct node *head, *newnode, *temp, *temp2;
-int empty = 1;
+struct node *head,*newnode,*temp,*temp2;
 
-void add(int item)
+void add_end(int item)
 {
 	newnode = (struct node*)malloc(sizeof(struct node));
-	newnode->data = item;	
-	
+	newnode->data = item;
 	if(head == NULL)
 	{
 		head = newnode;
 		newnode->next = NULL;
-		empty = 0;	
 	}
-	
 	else
 	{
 		temp = head;
-		while(temp->next != NULL)
+		while(temp -> next != NULL)
 		{
 			temp = temp->next;
 		}
-		temp->next = newnode;
+		temp->next=newnode;
 		newnode->next = NULL;
 	}
 }
 
-void remove_end()
+void add_beg(int item)
 {
-	if(empty == 1) 
+	newnode = (struct node*)malloc(sizeof(struct node));
+	newnode -> data = item;
+	if(head == NULL)
 	{
-		printf("\nLinkedlist is empty...\n");
-		return;
+		head = newnode;
+		newnode -> next = NULL;
 	}
-	temp = head;
-	int data;
-	if(head->next == NULL) {
-		data = head->data;
-		free(head);
-		printf("\nData removed: %d\n",data);
-		empty = 1;
-		return;
-	}
-	while(temp->next != NULL)
+	else
 	{
-		temp2 = temp;
-		temp = temp->next;
+		newnode -> next = head;
+		head = newnode;
 	}
-	temp2 -> next = NULL;
-	data = temp->data;
-	free(temp);
-	printf("Data removed: %d",data);
-	return;
+
 }
 
+void add_any(int item, int pos)
+{
+	newnode = (struct node*)malloc(sizeof(struct node));
+	newnode -> data = item;
+	int count = 1;
+	if(head == NULL)
+	{
+		head = newnode;
+		newnode -> next = NULL;
+	}
+	else
+	{
+		temp = head;
+		while(count<pos)
+		{
+			temp=temp->next;
+			count++;
+		}
+		temp2 = temp -> next;
+		temp -> next = newnode;
+		newnode -> next = temp2;
+	}
+}
+
+void delete_end()
+{
+	temp = head;
+	temp2 = temp->next;
+	while(temp2->next != NULL)
+	{
+		temp=temp->next;
+		temp2=temp->next;
+	}
+	temp->next=NULL;
+	printf("Deleted element: %d",temp2->data);
+	free(temp2);
+}
+
+void delete_beg()
+{
+	temp = head->next;
+	printf("Deleted Element: %d", head->data);
+	free(head);
+	head = temp;
+}
+
+void delete_any(int pos)
+{
+	int count = 1;
+	temp = head;
+	while(count<pos)
+	{
+		temp=temp->next;
+		count++;
+	}
+	temp2=temp->next->next;
+	printf("Deleted element: %d",temp->next->data);
+	free(temp->next);
+	temp->next=temp2;
+}
 void display()
 {
-	if(empty == 1) 
-	{
-		printf("\nLinkedlist is empty...\n");
-		return;
-	}
 	temp = head;
 	while(temp != NULL)
 	{
-		printf("%d ",temp->data);
-		temp=temp->next;
+		printf("%d ", temp->data);
+		temp = temp->next;
 	}
 }
 
-int main()
+void main()
 {
-	int item;
-	int ch;
-	while(ch != 4)
-    {
-        printf("\nMenu\n1. Insert\n2. Remove\n3. Display\n4. Exit\nEnter your choice: ");
-        scanf("%d" , &ch);
-
-        switch(ch)
-        {
-            case 1:
-                printf("\nEnter the item: ");
-                scanf("%d" , &item);
-                add(item);
-                break;
-            case 2:
-                remove_end();
-                break;
-            case 3:
-                display();
-                break;
-            case 4:
-                break;
-            default:
-                printf("\nWrong choice...Try Again\n"); 
-        }
-    }
-	
-	return 0;
+	int n,no,pos;
+	do {
+		printf("\n1. Add at end");
+		printf("\n2. Add at beginning");
+		printf("\n3. Add anywhere");
+		printf("\n4. Delete from end");
+		printf("\n5. Delete from start");
+		printf("\n6. Delete from anywhere");
+		printf("\n7. Display");
+		printf("\n8. Exit");
+		printf("\nEnter your choice: ");
+		scanf("%d",&n);
+		switch (n)
+		{
+			case 1:
+				printf("Enter the no: ");
+				scanf("%d", &no);
+				add_end(no);
+				break;
+			case 2:
+				printf("Enter the no: ");
+				scanf("%d", &no);
+				add_beg(no);
+				break;
+			case 3:
+				printf("Enter the no: ");
+				scanf("%d", &no);
+				printf("Enter the position: ");
+				scanf("%d", &pos);
+				add_any(no,pos);
+				break;
+			case 4:
+				delete_end();
+				break;
+			case 5:
+				delete_beg();
+				break;
+			case 6:
+				printf("Enter the position: ");
+				scanf("%d",&pos);
+				delete_any(pos);
+				break;
+			case 7:
+				display();
+				break;
+		}
+	}while(n != 8);
 }
