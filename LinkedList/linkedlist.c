@@ -126,7 +126,7 @@ void display()
 	}
 }
 
-void main()
+int main()
 {
 	int n,no,pos;
 	do {
@@ -175,4 +175,5 @@ void main()
 				break;
 		}
 	}while(n != 8);
+	return 0;
 }
